@@ -12,11 +12,19 @@ namespace board
         public int Colums { get; set; }
         private Piece[,] Piece;
 
+        //Contructs
         public Board(int line, int colums)
         {
             Line = line;
             Colums = colums;
             Piece =new Piece [line, colums];
+        }
+
+        //Methods
+
+        public Piece piece(int line, int colums)
+        {
+            return Piece[line, colums];
         }
     }
 }

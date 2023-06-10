@@ -7,7 +7,8 @@ namespace Console_Xadrez
         static void Main(string[] args)
         {
             Board board = new Board(8,8);
-            Console.ReadLine();
+
+            Screen.printBoard(board);
         }
     }
 }
