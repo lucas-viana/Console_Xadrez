@@ -1,10 +1,13 @@
-﻿namespace Console_Xadrez
+﻿using board;
+
+namespace Console_Xadrez
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Board board = new Board(8,8);
+            Console.ReadLine();
         }
     }
 }
