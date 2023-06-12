@@ -16,10 +16,11 @@ namespace Console_Xadrez
                     }
                     else
                     {
-                        Console.Write(board.piece(i,j)+" ");
+                        Console.Write(board.piece(i, j) + " ");
                     }
-                    
-                }Console.WriteLine();
+
+                }
+                Console.WriteLine();
             }
         }
     }
