@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using Chess;
 namespace board
 {
     internal class Position
@@ -15,6 +10,11 @@ namespace board
         {
             Line = line;
             Column = column;
+        }
+        
+        public override string ToString()
+        {
+            return Line + ", " + Column;
         }
     }
 }
