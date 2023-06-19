@@ -1,6 +1,4 @@
-﻿using board;
-
-namespace board
+﻿namespace Console_Xadrez.Board
 {
     internal class Board
     {
@@ -38,6 +36,18 @@ namespace board
             }
             Pieces[position.Line, position.Column] = piece;
             piece.Position = position;
+        }
+
+        public Piece removePiece (Position position)
+        {
+            if (piece(position) == null)
+            {
+                return null;
+            }
+            Piece aux = piece(position);
+            aux.Position = null;
+            Pieces[position.Line, position.Column] = null;
+            return aux;
         }
 
 

@@ -1,5 +1,6 @@
 ﻿using Chess;
-namespace board
+
+namespace Console_Xadrez.Board
 {
     internal class Position
     {
@@ -11,7 +12,7 @@ namespace board
             Line = line;
             Column = column;
         }
-        
+
         public override string ToString()
         {
             return Line + ", " + Column;

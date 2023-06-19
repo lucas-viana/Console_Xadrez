@@ -1,4 +1,4 @@
-﻿using board;
+﻿using Console_Xadrez.Board;
 using System;
 using System.Collections.Generic;
 using System.Linq;

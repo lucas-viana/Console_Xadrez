@@ -1,4 +1,4 @@
-﻿using board;
+﻿using Console_Xadrez.Board;
 
 namespace Chess
 {
