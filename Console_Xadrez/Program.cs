@@ -1,7 +1,8 @@
 ﻿using Chess;
 using Console_Xadrez.Board;
-namespace Console_Xadrez.Board
+namespace Console_Xadrez
 {
+
     internal class Program
     {
         static void Main(string[] args)
@@ -9,16 +10,26 @@ namespace Console_Xadrez.Board
             try
             {
                 ChessMatch match = new ChessMatch();
+                
 
                 while (!match.EndUp)
                 {
+
                     Console.Clear();
                     Screen.PrintBoard(match.Board);
-                    Console.Write("Origin: "); 
+                    Console.WriteLine();
+                    Console.WriteLine("Turno: + "+match.Rotation);
+                    Console.WriteLine("Aguardando jogada"+match.CurrentPlayer);
+                    Console.Write("Origin: ");
                     Position origin = Screen.ReadPosition().ToPosition();
-                    Console.Write("Target");
+
+                    bool[,] PossiblePosition = match.Board.piece(origin).PossibleMoves();
+                    Console.Clear();
+                    Screen.PrintBoard(match.Board,PossiblePosition);
+
+                    Console.Write("Target: ");
                     Position target = Screen.ReadPosition().ToPosition();
-                    match.MovePiece(origin, target);
+                    match.PerformingMove(origin, target);
 
                 }
 
