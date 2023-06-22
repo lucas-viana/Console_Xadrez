@@ -3,6 +3,37 @@ namespace Console_Xadrez.Board
 {
     internal class Screen
     {
+        public static void PrintMatch(ChessMatch match)
+        {
+            PrintBoard(match.Board);
+            Console.WriteLine();
+            Cap
+            Console.WriteLine("Turno: " + match.Rotation);
+            Console.WriteLine("Aguardando jogada: " + match.CurrentPlayer);
+        }
+        public static void PrintCapturedPieces(ChessMatch match)
+        {
+            Console.WriteLine("Captured pieces: ");
+            Console.Write("White: ");
+           PrintAggregate(match.CapturedPieces(Color.White));
+            Console.WriteLine();
+            Console.Write("Black: ");
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = aux;
+            PrintAggregate(match.CapturedPieces(Color.Black).ToHashSet());
+
+            Console.WriteLine();
+        }
+        public static void PrintAggregate(HashSet<Piece> aggregate)
+        {
+            Console.Write("[");
+            foreach(Piece x in aggregate)
+            {
+                Console.Write(x+" ");
+            }
+            Console.Write("]");
+        }
         public static void PrintBoard(Board board, bool[,] PossiblePosition)
         {
             ConsoleColor desktopBackground = Console.BackgroundColor;
@@ -26,10 +57,10 @@ namespace Console_Xadrez.Board
                 Console.WriteLine();
             }
             Console.WriteLine("  A B C D E F G H");
-            Console.BackgroundColor=desktopBackground;
+            Console.BackgroundColor = desktopBackground;
         }
-        
-        
+
+
         public static void PrintBoard(Board board)
         {
             for (int i = 0; i < board.Line; i++)
@@ -43,8 +74,8 @@ namespace Console_Xadrez.Board
             }
             Console.WriteLine("  A B C D E F G H");
         }
-        
-        
+
+
         public static ChessPosition ReadPosition()
         {
             string s = Console.ReadLine();
@@ -52,8 +83,8 @@ namespace Console_Xadrez.Board
             int line = int.Parse(s[1] + "");
             return new ChessPosition(ch, line);
         }
-       
-        
+
+
         public static void PrintPiece(Piece piece)
         {
             if (piece == null)
