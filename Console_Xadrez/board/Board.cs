@@ -18,12 +18,12 @@
 
         //Methods
 
-        public Piece piece(int line, int colums)// chamando peça por coordenadas
+        public Piece Piece(int line, int colums)// chamando peça por coordenadas
         {
             return Pieces[line, colums];
         }
 
-        public Piece piece(Position position)//Sobrecarga
+        public Piece Piece(Position position)//Sobrecarga
         {
             return Pieces[position.Line, position.Column];
         }
@@ -38,13 +38,13 @@
             piece.Position = position;
         }
 
-        public Piece removePiece (Position position)
+        public Piece RemovePiece (Position position)
         {
-            if (piece(position) == null)
+            if (Piece(position) == null)
             {
                 return null;
             }
-            Piece aux = piece(position);
+            Piece aux = Piece(position);
             aux.Position = null;
             Pieces[position.Line, position.Column] = null;
             return aux;
@@ -70,7 +70,7 @@
         public bool OcuppiedPosition(Position position) // teste para saber se a posição contém alguma peça a ocupando
         {
             ValidatePosition(position);
-            return piece(position) != null;
+            return Piece(position) != null;
         }
     }
 }

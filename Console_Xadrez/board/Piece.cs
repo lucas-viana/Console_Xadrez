@@ -18,6 +18,10 @@
         {
             NumMoviment++;
         }
+        public void DecrementMoviment()
+        {
+            NumMoviment--;
+        }
 
         public bool TestPossibleMoves()
         {
@@ -35,9 +39,14 @@
             return false;
         }
 
-        public bool TestPossibleMovesTarget(Position target)
+        public bool CanMove(Position position)
         {
-            return PossibleMoves()[target.Line, target.Column];
+            return PossibleMoves()[position.Line, position.Column];
+        }
+
+        public bool TestPossibleMovesTarget(Position position)
+        {
+            return PossibleMoves()[position.Line, position.Column];
         }
         public abstract bool[,] PossibleMoves();
 

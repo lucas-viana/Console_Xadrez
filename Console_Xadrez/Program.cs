@@ -19,12 +19,12 @@ namespace Console_Xadrez
                         Console.Clear();
                         Screen.PrintBoard(match.Board);
                         Console.WriteLine();
-                        Console.WriteLine("Rotation: + " + match.Rotation);
-                        Console.WriteLine("waiting for move" + match.CurrentPlayer);
+                        Screen.PrintCapturedPieces(match);
+                        Screen.PrintMatch(match);
                         Console.Write("Origin: ");
                         Position origin = Screen.ReadPosition().ToPosition();
                         match.ValidateOriginPosition(origin);
-                        bool[,] PossiblePosition = match.Board.piece(origin).PossibleMoves();
+                        bool[,] PossiblePosition = match.Board.Piece(origin).PossibleMoves();
                         Console.Clear();
                         Screen.PrintBoard(match.Board, PossiblePosition);
 
@@ -32,7 +32,6 @@ namespace Console_Xadrez
                         Position target = Screen.ReadPosition().ToPosition();
                         match.ValidateTargetPosition(origin, target);
                         match.PerformingMove(origin, target);
-
                     }
                     catch (BoardException e)
                     {
@@ -41,8 +40,8 @@ namespace Console_Xadrez
                     }
 
                 }
-
-
+                Console.Clear();
+                Screen.PrintMatch(match);
             }
             catch (BoardException e)
             {

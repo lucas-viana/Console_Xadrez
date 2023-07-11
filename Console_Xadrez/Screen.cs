@@ -5,32 +5,48 @@ namespace Console_Xadrez.Board
     {
         public static void PrintMatch(ChessMatch match)
         {
-            PrintBoard(match.Board);
+            
             Console.WriteLine();
-            Cap
-            Console.WriteLine("Turno: " + match.Rotation);
-            Console.WriteLine("Aguardando jogada: " + match.CurrentPlayer);
+
+            Console.WriteLine("Rotation: " + match.Rotation);
+            if (!match.EndUp)
+            {
+                Console.WriteLine("Waiting for move: " + match.CurrentPlayer);
+                Console.WriteLine();
+                if (match.Check)
+                {
+                    Console.WriteLine("Check!");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Checkmate!");
+                Console.WriteLine("Winner: "+match.CurrentPlayer);
+            }
+            
         }
         public static void PrintCapturedPieces(ChessMatch match)
         {
             Console.WriteLine("Captured pieces: ");
             Console.Write("White: ");
-           PrintAggregate(match.CapturedPieces(Color.White));
+            PrintAggregate(match.CapturedPieces(Color.White));
             Console.WriteLine();
             Console.Write("Black: ");
             ConsoleColor aux = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.ForegroundColor = aux;
             PrintAggregate(match.CapturedPieces(Color.Black).ToHashSet());
+            Console.ForegroundColor = aux;
+            
 
+            Console.WriteLine();
             Console.WriteLine();
         }
         public static void PrintAggregate(HashSet<Piece> aggregate)
         {
             Console.Write("[");
-            foreach(Piece x in aggregate)
+            foreach (Piece x in aggregate)
             {
-                Console.Write(x+" ");
+                Console.Write(x + " ");
             }
             Console.Write("]");
         }
@@ -51,12 +67,12 @@ namespace Console_Xadrez.Board
                     {
                         Console.BackgroundColor = desktopBackground;
                     }
-                    PrintPiece(board.piece(i, j));
+                    PrintPiece(board.Piece(i, j));
                     Console.BackgroundColor = desktopBackground;
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine("  A B C D E F G H");
+            Console.WriteLine("  a b c d e f g h");
             Console.BackgroundColor = desktopBackground;
         }
 
@@ -68,20 +84,20 @@ namespace Console_Xadrez.Board
                 Console.Write(8 - i + " ");
                 for (int j = 0; j < board.Colums; j++)
                 {
-                    PrintPiece(board.piece(i, j));
+                    PrintPiece(board.Piece(i, j));
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine("  A B C D E F G H");
+            Console.WriteLine("  a b c d e f g h");
         }
 
 
         public static ChessPosition ReadPosition()
         {
             string s = Console.ReadLine();
-            char ch = s[0];
+            char column = s[0];
             int line = int.Parse(s[1] + "");
-            return new ChessPosition(ch, line);
+            return new ChessPosition(column, line);
         }
 
 
@@ -89,7 +105,7 @@ namespace Console_Xadrez.Board
         {
             if (piece == null)
             {
-                Console.Write("- ");
+                Console.Write("-");
             }
             else if (piece.Color == Color.White)
             {
@@ -100,7 +116,7 @@ namespace Console_Xadrez.Board
             {
                 ConsoleColor aux = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write(piece + " ");
+                Console.Write(piece + "");
                 Console.ForegroundColor = aux;
             }
             Console.Write(" ");

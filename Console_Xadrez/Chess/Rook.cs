@@ -13,60 +13,60 @@ namespace Chess
         }
         private bool CanMove(Position position)
         {
-            Piece piece = Board.piece(position);
+            Piece piece = Board.Piece(position);
             return piece == null || piece.Color != Color;
         }
         public override bool[,] PossibleMoves()
         {
             bool[,] mat = new bool[Board.Line, Board.Colums];
-            Position pos = new Position(0, 0);
+            Position position = new Position(0, 0);
 
             // Up
-            pos.SetValues(Position.Line - 1, Position.Column);
-            while(Board.ValidPosition(pos)&& CanMove(pos))
+            position.SetValues(Position.Line - 1, Position.Column);
+            while (Board.ValidPosition(position) && CanMove(position))
             {
-                mat[pos.Line, pos.Column] = true;
-                if (Board.piece(pos) == null && Board.piece(pos).Color != Color)
+                mat[position.Line, position.Column] = true;
+                if (Board.Piece(position) != null && Board.Piece(position).Color != Color)
                 {
                     break;
                 }
-                pos.Line = pos.Line--;
+                position.Line = position.Line - 1;
             }
 
             // Rigth
-            pos.SetValues(Position.Line, Position.Column+1);
-            while (Board.ValidPosition(pos) && CanMove(pos))
+            position.SetValues(Position.Line, Position.Column + 1);
+            while (Board.ValidPosition(position) && CanMove(position))
             {
-                mat[pos.Line, pos.Column] = true;
-                if (Board.piece(pos) == null && Board.piece(pos).Color != Color)
+                mat[position.Line, position.Column] = true;
+                if (Board.Piece(position) != null && Board.Piece(position).Color != Color)
                 {
                     break;
                 }
-                pos.Column++;
+                position.Column = position.Column + 1;
             }
 
             // Down
-            pos.SetValues(Position.Line + 1, Position.Column);
-            while (Board.ValidPosition(pos) && CanMove(pos))
+            position.SetValues(Position.Line + 1, Position.Column);
+            while (Board.ValidPosition(position) && CanMove(position))
             {
-                mat[pos.Line, pos.Column] = true;
-                if (Board.piece(pos) == null && Board.piece(pos).Color != Color)
+                mat[position.Line, position.Column] = true;
+                if (Board.Piece(position) != null && Board.Piece(position).Color != Color)
                 {
                     break;
                 }
-                pos.Line = pos.Line++;
+                position.Line = position.Line + 1;
             }
 
             // Left
-            pos.SetValues(Position.Line, Position.Column-1);
-            while (Board.ValidPosition(pos) && CanMove(pos))
+            position.SetValues(Position.Line, Position.Column - 1);
+            while (Board.ValidPosition(position) && CanMove(position))
             {
-                mat[pos.Line, pos.Column] = true;
-                if (Board.piece(pos) == null && Board.piece(pos).Color != Color)
+                mat[position.Line, position.Column] = true;
+                if (Board.Piece(position) != null && Board.Piece(position).Color != Color)
                 {
                     break;
                 }
-                pos.Line = pos.Column--;
+                position.Column = position.Column - 1;
             }
 
             return mat;
