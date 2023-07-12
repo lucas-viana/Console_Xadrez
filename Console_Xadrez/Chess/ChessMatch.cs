@@ -1,5 +1,4 @@
 ﻿using Console_Xadrez.Board;
-using System.Collections.Generic;
 
 namespace Chess
 {
@@ -12,7 +11,7 @@ namespace Chess
         private HashSet<Piece> Pieces;
         private HashSet<Piece> Captured;
         public bool Check { get; private set; }
-        
+        public Piece VulnerablePassing { get; private set; }
 
 
         public ChessMatch()
@@ -22,13 +21,14 @@ namespace Chess
             CurrentPlayer = Color.White;
             EndUp = false;
             Check = false;
+            VulnerablePassing = null;
             Pieces = new HashSet<Piece>();
             Captured = new HashSet<Piece>();
-            
+
             PutPiece();
         }
 
-        
+
 
         public Piece MovePiece(Position origin, Position target)
         {
@@ -59,6 +59,26 @@ namespace Chess
                 K.IncrementMoviment();
                 Board.PutPiece(K, targetK);
             }
+
+            //#SpecialMove En passant
+            if (piece is Pawn)
+            {
+                if (origin.Column != target.Column && capturedPiece == null)
+                {
+                    Position positionPawn;
+                    if (piece.Color == Color.White)
+                    {
+                        positionPawn = new Position(target.Line + 1, target.Column);
+                    }
+                    else
+                    {
+                        positionPawn = new Position(target.Line - 1, target.Column);
+                    }
+                    capturedPiece = Board.RemovePiece(positionPawn);
+                    Captured.Add(capturedPiece);
+                }
+            }
+
             return piece;
         }
 
@@ -70,7 +90,7 @@ namespace Chess
                 UndoMoviment(origin, target, capturedPiece);
                 throw new BoardException("You can't put yourself in check!");
             }
-            
+
 
             if (InCheck(Adversary(CurrentPlayer)))
             {
@@ -85,10 +105,23 @@ namespace Chess
                 EndUp = true;
             }
 
-                Piece piece = Board.Piece(target);
+            else
+            {
                 Rotation++;
                 ChangePlayer();
-            
+            }
+            Piece piece = Board.Piece(target);
+
+            // #SpecialMove en passsant
+            if (piece is Pawn && (target.Line == origin.Line - 2 || target.Line == origin.Line + 2))
+            {
+                VulnerablePassing = piece;
+            }
+            else
+            {
+                VulnerablePassing = null;
+            }
+
         }
         public void UndoMoviment(Position origin, Position target, Piece capturedPiece)
         {
@@ -119,6 +152,25 @@ namespace Chess
                 Piece K = Board.RemovePiece(targetK);
                 K.DecrementMoviment();
                 Board.PutPiece(K, originK);
+            }
+
+            // #SpecialMove En passant
+            if(piece is Pawn)
+            {
+                if(target.Column!= target.Column && capturedPiece == VulnerablePassing)
+                {
+                    Piece pawn = Board.RemovePiece(target);
+                    Position positionPawn;
+                    if(piece.Color == Color.White)
+                    {
+                        positionPawn = new Position(3, target.Column);
+                    }
+                    else
+                    {
+                        positionPawn = new Position(4, target.Column);
+                    }
+                    Board.PutPiece(pawn, positionPawn);
+                }
             }
         }
 
@@ -260,28 +312,28 @@ namespace Chess
             Pieces.Add(piece);
         }
 
-        
+
         private void PutPiece()
         {
-            
+
             //White
             PutNewPiece('a', 1, new Rook(Color.White, Board));
             PutNewPiece('b', 1, new Horse(Color.White, Board));
             PutNewPiece('c', 1, new Bishop(Color.White, Board));
             PutNewPiece('d', 1, new Queen(Color.White, Board));
-            PutNewPiece('e', 1, new King(Color.White, Board,this )); 
+            PutNewPiece('e', 1, new King(Color.White, Board, this));
             PutNewPiece('f', 1, new Bishop(Color.White, Board));
             PutNewPiece('g', 1, new Horse(Color.White, Board));
             PutNewPiece('h', 1, new Rook(Color.White, Board));
 
-            PutNewPiece('a', 2, new Pawn(Color.White, Board));
-            PutNewPiece('b', 2, new Pawn(Color.White, Board));
-            PutNewPiece('c', 2, new Pawn(Color.White, Board));
-            PutNewPiece('d', 2, new Pawn(Color.White, Board));
-            PutNewPiece('e', 2, new Pawn(Color.White, Board));
-            PutNewPiece('f', 2, new Pawn(Color.White, Board));
-            PutNewPiece('g', 2, new Pawn(Color.White, Board));
-            PutNewPiece('h', 2, new Pawn(Color.White, Board));
+            PutNewPiece('a', 2, new Pawn(Color.White, Board, this));
+            PutNewPiece('b', 2, new Pawn(Color.White, Board, this));
+            PutNewPiece('c', 2, new Pawn(Color.White, Board, this));
+            PutNewPiece('d', 2, new Pawn(Color.White, Board, this));
+            PutNewPiece('e', 2, new Pawn(Color.White, Board, this));
+            PutNewPiece('f', 2, new Pawn(Color.White, Board, this));
+            PutNewPiece('g', 2, new Pawn(Color.White, Board, this));
+            PutNewPiece('h', 2, new Pawn(Color.White, Board, this));
 
             //Black
             PutNewPiece('a', 8, new Rook(Color.Black, Board));
@@ -293,14 +345,15 @@ namespace Chess
             PutNewPiece('g', 8, new Horse(Color.Black, Board));
             PutNewPiece('h', 8, new Rook(Color.Black, Board));
 
-            PutNewPiece('a', 7, new Pawn(Color.Black, Board));
-            PutNewPiece('b', 7, new Pawn(Color.Black, Board));
-            PutNewPiece('c', 7, new Pawn(Color.Black, Board));
-            PutNewPiece('d', 7, new Pawn(Color.Black, Board));
-            PutNewPiece('e', 7, new Pawn(Color.Black, Board));
-            PutNewPiece('f', 7, new Pawn(Color.Black, Board));
-            PutNewPiece('g', 7, new Pawn(Color.Black, Board));
-            PutNewPiece('h', 7, new Pawn(Color.Black, Board));
+            PutNewPiece('a', 7, new Pawn(Color.Black, Board, this));
+            PutNewPiece('b', 7, new Pawn(Color.Black, Board, this));
+            PutNewPiece('c', 7, new Pawn(Color.Black, Board, this));
+            PutNewPiece('d', 7, new Pawn(Color.Black, Board, this));
+            PutNewPiece('e', 7, new Pawn(Color.Black, Board, this));
+            PutNewPiece('f', 7, new Pawn(Color.Black, Board, this));
+            PutNewPiece('g', 7, new Pawn(Color.Black, Board, this));
+            PutNewPiece('h', 7, new Pawn(Color.Black, Board, this));
+
 
         }
     }

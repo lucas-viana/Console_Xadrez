@@ -4,8 +4,10 @@ namespace Chess
 {
     internal class Pawn : Piece
     {
-        public Pawn(Color color, Board board) : base(color, board)
+        private ChessMatch Match;
+        public Pawn(Color color, Board board, ChessMatch match) : base(color, board)
         {
+            Match = match;
         }
 
         public override string? ToString()
@@ -55,6 +57,23 @@ namespace Chess
                 {
                     mat[pos.Line, pos.Column] = true;
                 }
+
+                // #SpecialMove en passant
+
+                if (Position.Line == 3)
+                {
+                    Position Left = new Position(Position.Line, Position.Column - 1);
+                    if (Board.ValidPosition(Left) && ExistEnemy(Left) && Board.Piece(Left)== Match.VulnerablePassing)
+                    {
+                        mat[Left.Line-1, Left.Column] = true;
+                    }
+
+                    Position Rigth = new Position(Position.Line, Position.Column + 1);
+                    if (Board.ValidPosition(Rigth) && ExistEnemy(Rigth) && Board.Piece(Rigth) == Match.VulnerablePassing)
+                    {
+                        mat[Rigth.Line-1, Rigth.Column] = true;
+                    }
+                }
             }
             else
             {
@@ -82,6 +101,23 @@ namespace Chess
                 if (Board.ValidPosition(pos) && ExistEnemy(pos))
                 {
                     mat[pos.Line, pos.Column] = true;
+                }
+
+                // #SpecialMove en passant
+
+                if (Position.Line == 4)
+                {
+                    Position Left = new Position(Position.Line, Position.Column - 1);
+                    if (Board.ValidPosition(Left) && ExistEnemy(Left) && Board.Piece(Left) == Match.VulnerablePassing)
+                    {
+                        mat[Left.Line+1, Left.Column] = true;
+                    }
+
+                    Position Rigth = new Position(Position.Line, Position.Column + 1);
+                    if (Board.ValidPosition(Rigth) && ExistEnemy(Rigth) && Board.Piece(Rigth) == Match.VulnerablePassing)
+                    {
+                        mat[Rigth.Line+1, Rigth.Column] = true;
+                    }
                 }
             }
             return mat;
