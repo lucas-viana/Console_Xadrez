@@ -90,7 +90,21 @@ namespace Chess
                 UndoMoviment(origin, target, capturedPiece);
                 throw new BoardException("You can't put yourself in check!");
             }
+            
+            Piece piece = Board.Piece(target);
 
+            //#SpecialMove promotion
+            if(piece is Pawn)
+            {
+                if((piece.Color == Color.White && target.Line == 0) || (piece.Color == Color.Black && target.Line == 7))
+                {
+                    piece = Board.RemovePiece(target);
+                    Pieces.Remove(piece);
+                    Piece quenn = new Queen(piece.Color, Board);
+                    Board.PutPiece(quenn, target);
+                    Pieces.Add(quenn);
+                }
+            }
 
             if (InCheck(Adversary(CurrentPlayer)))
             {
@@ -110,7 +124,7 @@ namespace Chess
                 Rotation++;
                 ChangePlayer();
             }
-            Piece piece = Board.Piece(target);
+            
 
             // #SpecialMove en passsant
             if (piece is Pawn && (target.Line == origin.Line - 2 || target.Line == origin.Line + 2))
